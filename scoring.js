@@ -24,30 +24,42 @@ function calculateReceivingScore(player) {
 }
 
 function calculateReturnScore(player) {
-  const kickYards = parseFloat((player.stats.return.kickreturn.yards / 15).toFixed(2))
+  const kickYards = parseFloat(
+    (player.stats.return.kickreturn.yards / 15).toFixed(2)
+  )
   const kickTouchdowns = player.stats.return.kickreturn.touchdowns * 6
   const kickFumbles = player.stats.return.kickreturn.fumbles * -3
 
-  const puntYards = parseFloat((player.stats.return.puntreturn.yards / 15).toFixed(2))
+  const puntYards = parseFloat(
+    (player.stats.return.puntreturn.yards / 15).toFixed(2)
+  )
   const puntTouchdowns = player.stats.return.puntreturn.touchdowns * 6
   const puntFumbles = player.stats.return.puntreturn.fumbles * -3
 
-  return kickYards + kickTouchdowns + kickFumbles + puntYards + puntTouchdowns + puntFumbles
+  return (
+    kickYards +
+    kickTouchdowns +
+    kickFumbles +
+    puntYards +
+    puntTouchdowns +
+    puntFumbles
+  )
 }
 
-module.exports.calculateScore = function (player) {
+module.exports.calculateScore = function(player) {
   switch (player.position) {
     case 'QB':
-      return calculatePassingScore(player) +
-        calculateRushingScore(player)
+      return calculatePassingScore(player) + calculateRushingScore(player)
     case 'RB':
     case 'WR':
-      return calculateRushingScore(player) +
+      return (
+        calculateRushingScore(player) +
         calculateReceivingScore(player) +
         calculateReturnScore(player)
+      )
     case 'TE':
       return calculateReceivingScore(player)
     default:
-      return 0
+      throw new Error(`Unknown player position (${player.position})`)
   }
 }
